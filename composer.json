@@ -1,0 +1,55 @@
+{
+    "name": "spartan/message",
+    "description": "Spartan Message library",
+    "type": "library",
+    "keywords": [
+        "library",
+        "spartan",
+        "message"
+    ],
+    "homepage": "https://spartanphp.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Iulian N.",
+            "email": "iulian@spartanphp.com",
+            "homepage": "https://spartanphp.com",
+            "role": "developer"
+        }
+    ],
+    "support": {
+        "email": "support@spartanphp.com",
+        "docs": "https://docs.spartanphp.com"
+    },
+    "require": {
+        "php": ">=7.4",
+        "ext-fileinfo": "*",
+        "spartan/http": "^0.1.0",
+        "laminas/laminas-mail": "^2.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Spartan\\Message\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0",
+        "swiftmailer/swiftmailer": "^6.2",
+        "spartan/service": "^0.1.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Spartan\\Message\\Test\\": "tests/"
+        }
+    },
+    "suggest": {
+        "swiftmailer/swiftmailer": "swiftmailer/swiftmailer:^6.2 for SMTP providers"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
