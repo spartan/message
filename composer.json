@@ -48,7 +48,17 @@
     "config": {
         "sort-packages": true
     },
-    "scripts": {
+    "extra": {
+        "spartan": {
+            "install": {
+                "env": {
+                    "MESSAGE_ADAPTER": "mailtrap"
+                },
+                "copy": {
+                    "config/message.php": "config/message.php"
+                }
+            }
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
