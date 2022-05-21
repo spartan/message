@@ -51,6 +51,18 @@ class Http implements ProviderInterface
     }
 
     /**
+     * @param array $config
+     *
+     * @return $this
+     */
+    public function withConfig(array $config): self
+    {
+        $this->config = $config + $this->config;
+
+        return $this;
+    }
+
+    /**
      * @param MessageInterface $message
      *
      * @return RequestInterface

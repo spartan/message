@@ -37,9 +37,24 @@ return [
     /*
      * Mailjet provider
      */
-    'mailjet' => [
+    'mailjet'  => [
         'url'             => 'https://api.mailjet.com/v3/send',
         'api_key_public'  => getenv('MAILJET_PUBLIC_KEY'),
         'api_key_private' => getenv('MAILJET_PRIVATE_KEY'),
+    ],
+
+    /*
+     *
+     * SMS providers
+     *
+     */
+
+    /*
+     * BulkSMS provider
+     */
+    'bulksms'  => [
+        'url'     => 'https://api.bulksms.com/v1/messages',
+        'app_id'  => getenv('BULKSMS_APP_ID'),
+        'app_key' => getenv('BULKSMS_APP_KEY'),
     ],
 ];
