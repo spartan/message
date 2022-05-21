@@ -1,4 +1,11 @@
 # Changelog
+### [0.1.2](https://github.com/spartan/message/compare/v0.1.1...v0.1.2) (2022-05-21)
+
+
+### New
+
+* sms functionality via bulksms provider ([809001d](https://github.com/spartan/message/commit/809001da51483457ce3190f697e43189102fb9b5))
+
 ### [0.1.1](https://github.com/spartan/message/compare/v0.1.0...v0.1.1) (2021-03-04)
 
 
