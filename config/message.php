@@ -50,6 +50,13 @@ return [
      */
 
     /*
+     * Local test SMS provider
+     */
+    'localsms' => [
+        'path' => './text_messages',
+    ],
+
+    /*
      * BulkSMS provider
      */
     'bulksms'  => [
