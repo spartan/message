@@ -1,4 +1,11 @@
 # Changelog
+### [0.1.3](https://github.com/spartan/message/compare/v0.1.2...v0.1.3) (2022-05-23)
+
+
+### New
+
+* local sms provider for testing ([ed1da8f](https://github.com/spartan/message/commit/ed1da8f1b44cfb943bb559d86e5bcbdae123279e))
+
 ### [0.1.2](https://github.com/spartan/message/compare/v0.1.1...v0.1.2) (2022-05-21)
 
 
