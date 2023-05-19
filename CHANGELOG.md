@@ -1,4 +1,11 @@
 # Changelog
+### [0.1.4](https://github.com/spartan/message/compare/v0.1.3...v0.1.4) (2023-05-19)
+
+
+### New
+
+* UltraMsg provider for WhatsApp messages ([50f588e](https://github.com/spartan/message/commit/50f588e1fe3a294f1f7091c27fb9649bef7e7a2e))
+
 ### [0.1.3](https://github.com/spartan/message/compare/v0.1.2...v0.1.3) (2022-05-23)
 
 
