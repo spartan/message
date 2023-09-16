@@ -1,4 +1,11 @@
 # Changelog
+### [0.1.5](https://github.com/spartan/message/compare/v0.1.4...v0.1.5) (2023-09-16)
+
+
+### New
+
+* ntfy adapter ([97c1d86](https://github.com/spartan/message/commit/97c1d86df97855896546ae37a3b6f111f172f99e))
+
 ### [0.1.4](https://github.com/spartan/message/compare/v0.1.3...v0.1.4) (2023-05-19)
 
 
