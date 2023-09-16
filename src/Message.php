@@ -6,6 +6,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Spartan\Message\Definition\ProviderInterface;
+use Spartan\Message\Provider\Alert\Ntfy;
 use Spartan\Message\Provider\Mail\Mailgun;
 use Spartan\Message\Provider\Mail\Mailjet;
 use Spartan\Message\Provider\Mail\Mailtrap;
@@ -23,6 +24,7 @@ class Message
         'mailgun'  => Mailgun::class,
         'mailtrap' => Mailtrap::class,
         'mailjet'  => Mailjet::class,
+        'ntfy'     => Ntfy::class,
     ];
 
     /**

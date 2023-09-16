@@ -64,4 +64,15 @@ return [
         'app_id'  => getenv('BULKSMS_APP_ID'),
         'app_key' => getenv('BULKSMS_APP_KEY'),
     ],
+
+    /*
+     * ntfy provider
+     *
+     * @see https://ntfy.sh/
+     */
+    'ntfy'     => [
+        'url'  => getenv('NTFY_URL'),
+        'user' => getenv('NTFY_USER'),
+        'pass' => getenv('NTFY_PASS'),
+    ],
 ];
