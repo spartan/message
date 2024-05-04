@@ -1,4 +1,11 @@
 # Changelog
+### [0.1.6](https://github.com/spartan/message/compare/v0.1.5...v0.1.6) (2024-05-04)
+
+
+### Changes
+
+* ultramsg change default priority to low ([7401f2f](https://github.com/spartan/message/commit/7401f2fa2d5fd521917786db2d9fa33b396813f8))
+
 ### [0.1.5](https://github.com/spartan/message/compare/v0.1.4...v0.1.5) (2023-09-16)
 
 
