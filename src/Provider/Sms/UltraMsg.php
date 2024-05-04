@@ -41,7 +41,7 @@ class UltraMsg extends Http
                 'token'    => $this->config['app_key'],
                 'to'       => $message->getHeaderLine('to'),
                 'body'     => $message->getHeaderLine('body'),
-                'priority' => $message->getHeaderLine('priority') ?: 1,
+                'priority' => $message->getHeaderLine('priority') ?: 10,
             ] + $message->getHeaders();
 
         $body = new Stream('php://memory', 'r+');
