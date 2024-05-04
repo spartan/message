@@ -1,4 +1,11 @@
 # Changelog
+### [0.1.7](https://github.com/spartan/message/compare/v0.1.6...v0.1.7) (2024-05-04)
+
+
+### Changes
+
+* chage UltraMsg implementation to use GET instead of POST ([dfc0406](https://github.com/spartan/message/commit/dfc0406f61a6845c1b8cf67576ad19814b6f2e2b))
+
 ### [0.1.6](https://github.com/spartan/message/compare/v0.1.5...v0.1.6) (2024-05-04)
 
 
