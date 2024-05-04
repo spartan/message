@@ -2,7 +2,6 @@
 
 namespace Spartan\Message\Provider\Sms;
 
-use Laminas\Diactoros\Stream;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Spartan\Message\Provider\Http;
@@ -34,21 +33,19 @@ class UltraMsg extends Http
      */
     public function request(MessageInterface $message): RequestInterface
     {
-        $request = $this->factory
-            ->createRequest('POST', sprintf($this->config['url'], $this->config['app_id']));
-
         $params = [
-                'token'    => $this->config['app_key'],
-                'to'       => $message->getHeaderLine('to'),
-                'body'     => $message->getHeaderLine('body'),
-                'priority' => $message->getHeaderLine('priority') ?: 10,
-            ] + $message->getHeaders();
+            'token' => $this->config['app_key'],
+            'to'    => $message->getHeaderLine('to'),
+            'body'  => $message->getHeaderLine('body') ?: (string)$message->getBody(),
+        ];
 
-        $body = new Stream('php://memory', 'r+');
-        $body->write(http_build_query($params));
-
-        return $request
-            ->withHeader('Content-Type', 'application/x-www-form-urlencoded')
-            ->withBody($body);
+        return $this->factory
+            ->createRequest(
+                'GET',
+                sprintf(
+                    $this->config['url'],
+                    $this->config['app_id']
+                ) . '?' . http_build_query($params)
+            );
     }
 }
