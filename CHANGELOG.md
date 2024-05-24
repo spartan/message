@@ -1,4 +1,11 @@
 # Changelog
+### [0.1.8](https://github.com/spartan/message/compare/v0.1.7...v0.1.8) (2024-05-24)
+
+
+### New
+
+* add ClickSend gateway ([900c8cd](https://github.com/spartan/message/commit/900c8cd51edd743a12dcf5206f383c1cb379c105))
+
 ### [0.1.7](https://github.com/spartan/message/compare/v0.1.6...v0.1.7) (2024-05-04)
 
 
