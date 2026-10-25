@@ -67,15 +67,16 @@ class Smtp implements ProviderInterface
      */
     public function transport(): EsmtpTransport
     {
+        // subclasses (Mailtrap) override $config with their own defaults => keys may be missing
         $transport = new EsmtpTransport(
-            (string)$this->config['host'],
-            (int)$this->config['port'],
-            $this->config['tls']
+            (string)($this->config['host'] ?? ''),
+            (int)($this->config['port'] ?? 0),
+            $this->config['tls'] ?? null
         );
 
-        if ($this->config['user']) {
+        if ($this->config['user'] ?? null) {
             $transport->setUsername((string)$this->config['user']);
-            $transport->setPassword((string)$this->config['pass']);
+            $transport->setPassword((string)($this->config['pass'] ?? ''));
         }
 
         return $transport;

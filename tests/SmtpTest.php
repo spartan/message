@@ -90,4 +90,29 @@ class SmtpTest extends TestCase
 
         $this->assertInstanceOf(Mailtrap::class, Mailtrap::create(['host' => 'smtp.mailtrap.io'], $container));
     }
+
+    public function testMailtrapTransportWithAppConfig()
+    {
+        $container = $this->createMock(\Psr\Container\ContainerInterface::class);
+        $container->method('get')->willReturn(new Response());
+
+        // Mailtrap's own $config defaults have no "tls" => regression: "Undefined array key" under the app error handler
+        set_error_handler(
+            function (int $severity, string $message, string $file = '', int $line = 0) {
+                throw new \ErrorException($message, 0, $severity, $file, $line);
+            }
+        );
+
+        try {
+            $transport = Mailtrap::create(
+                ['host' => 'smtp.mailtrap.io', 'port' => 2525, 'user' => 'u', 'pass' => 'p'],
+                $container
+            )->transport();
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertSame('smtp://smtp.mailtrap.io:2525', (string)$transport);
+        $this->assertSame('u', $transport->getUsername());
+    }
 }
