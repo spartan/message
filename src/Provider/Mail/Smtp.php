@@ -2,17 +2,20 @@
 
 namespace Spartan\Message\Provider\Mail;
 
-use Laminas\Mail\Address;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Spartan\Http\Header\Attachment;
-use Spartan\Http\Header\MessageId;
 use Spartan\Http\Http;
 use Spartan\Message\Definition\ProviderInterface;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 /**
  * Smtp Provider
+ *
+ * Requires symfony/mailer
  *
  * @package Spartan\Message
  * @author  Iulian N. <iulian@spartanphp.com>
@@ -28,6 +31,7 @@ class Smtp implements ProviderInterface
         'port' => '',
         'user' => '',
         'pass' => '',
+        'tls'  => null, // null: SMTPS on port 465, STARTTLS when offered otherwise
     ];
 
     protected ResponseInterface $response;
@@ -48,120 +52,102 @@ class Smtp implements ProviderInterface
      * @param mixed[]            $config
      * @param ContainerInterface $container
      *
-     * @return Smtp
+     * @return static
      */
     public static function create(array $config, ContainerInterface $container)
     {
-        return new self(
+        return new static(
             $config,
             $container->get(ResponseInterface::class)
         );
     }
 
     /**
-     * @return \Swift_Mailer
+     * @return EsmtpTransport
      */
-    public function mailer(): \Swift_Mailer
+    public function transport(): EsmtpTransport
     {
-        return new \Swift_Mailer($this->transport());
-    }
+        $transport = new EsmtpTransport(
+            (string)$this->config['host'],
+            (int)$this->config['port'],
+            $this->config['tls']
+        );
 
-    /**
-     * @return \Swift_Transport
-     */
-    public function transport(): \Swift_Transport
-    {
-        return (new \Swift_SmtpTransport($this->config['host'], $this->config['port']))
-            ->setUsername($this->config['user'])
-            ->setPassword($this->config['pass']);
+        if ($this->config['user']) {
+            $transport->setUsername((string)$this->config['user']);
+            $transport->setPassword((string)$this->config['pass']);
+        }
+
+        return $transport;
     }
 
     /**
      * @param MessageInterface $message
      *
-     * @return \Swift_Message
+     * @return Email
      */
-    public function swiftMessage(MessageInterface $message): \Swift_Message
+    public function email(MessageInterface $message): Email
     {
-        $swiftMessage = new \Swift_Message();
+        $email = new Email();
+
+        // addresses: "John Doe <john.doe@gmail.com>" or "john.doe@gmail.com"
+        foreach (['from', 'to', 'cc', 'bcc'] as $name) {
+            $addresses = array_map([Address::class, 'create'], $message->getHeader($name));
+
+            if ($addresses) {
+                $email->{$name}(...$addresses);
+            }
+        }
+
+        if ($message->hasHeader('Subject')) {
+            $email->subject($message->getHeaderLine('Subject'));
+        }
 
         // attachments
         foreach ($message->getHeader('Attachment') as $attachment) {
             /** @var Attachment $attachment */
-            $swiftMessage->attach(
-                \Swift_Attachment::fromPath((string)$attachment->file()->getRealPath())
-                                 ->setFilename($attachment->name())
-                                 ->setContentType($attachment->mime())
+            $email->attachFromPath(
+                (string)$attachment->file()->getRealPath(),
+                $attachment->name(),
+                $attachment->mime()
             );
         }
 
         // inline image
         foreach ($message->getHeader('Inline') as $inline) {
             /** @var Attachment $inline */
-            $swiftMessage->embed(
-                \Swift_Image::fromPath((string)$inline->file()->getRealPath())
-            );
+            $email->embedFromPath((string)$inline->file()->getRealPath(), $inline->name(), $inline->mime());
         }
 
         // body
         if ((string)$message->getBody()) {
-            $swiftMessage->setBody((string)$message->getBody(), 'text/html');
+            $email->html((string)$message->getBody());
         } else {
-            $swiftMessage->setBody($message->getHeaderLine('Text'), 'text/plain');
+            $email->text($message->getHeaderLine('Text'));
         }
 
-        // headers
-        foreach ($message->getHeaders() as $name => $value) {
-            // fix From, To, Cc, Bcc
-            if (in_array(strtolower($name), ['from', 'to', 'cc', 'bcc'])) {
-                $addresses = [];
-                foreach ($message->getHeader($name) as $address) {
-                    $address = Address::fromString($address);
-                    if ($address->getName()) {
-                        $addresses[$address->getEmail()] = $address->getName();
-                    } else {
-                        $addresses[] = $address->getEmail();
-                    }
-                }
-
-                $swiftMessage->{"set{$name}"}($addresses);
-            } elseif (method_exists($swiftMessage, "set{$name}")) {
-                $swiftMessage->{"set{$name}"}($message->getHeaderLine($name));
-            }
-        }
-
-        return $swiftMessage;
+        return $email;
     }
 
     /**
+     * Failures throw \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     *
      * @param MessageInterface $message
      *
      * @return ResponseInterface
-     * @throws \Exception
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
     public function send(MessageInterface $message): ResponseInterface
     {
-        $result = $this->mailer()->send($this->swiftMessage($message));
+        $sent = $this->transport()->send($this->email($message));
 
-        $response = $this->response;
-
-        if ($result > 0) {
-            return Http::response($response)
-                       ->withJsonBody(
-                           [
-                               'id'     => MessageId::generateId(),
-                               'result' => $result,
-                           ]
-                       )
-                       ->withStatus(200);
-        } else {
-            return Http::response($response)
-                       ->withJsonBody(
-                           [
-                               'result' => $result,
-                           ]
-                       )
-                       ->withStatus(500);
-        }
+        return Http::response($this->response)
+                   ->withJsonBody(
+                       [
+                           'id'     => $sent ? $sent->getMessageId() : null,
+                           'result' => $sent ? 1 : 0,
+                       ]
+                   )
+                   ->withStatus($sent ? 200 : 500);
     }
 }
