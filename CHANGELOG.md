@@ -1,4 +1,11 @@
 # Changelog
+### [0.2.1](https://github.com/spartan/message/compare/v0.2.0...v0.2.1) (2026-10-25)
+
+
+### Fixes
+
+* regression issue w/ smtp after switching to symfony/mailer ([5462d7d](https://github.com/spartan/message/commit/5462d7dfffea0e8942f88bc181412e85231f35b6))
+
 ## [0.2.0](https://github.com/spartan/message/compare/v0.1.8...v0.2.0) (2026-10-25)
 
 
