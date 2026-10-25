@@ -1,4 +1,11 @@
 # Changelog
+## [0.2.0](https://github.com/spartan/message/compare/v0.1.8...v0.2.0) (2026-10-25)
+
+
+### New
+
+* change smtp driver from swiftmailer to symfony/mailer ([8671af6](https://github.com/spartan/message/commit/8671af64e6667524dcfd45b32b38665bce0a30b1))
+
 ### [0.1.8](https://github.com/spartan/message/compare/v0.1.7...v0.1.8) (2024-05-24)
 
 
